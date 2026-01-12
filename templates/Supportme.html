@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>为梦想充电</title>
+    <style>
+        /* 复用主页的背景变量 */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 50%, #a6c1ee 100%);
+        }
+        body {
+            background-image: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; font-family: 'Microsoft YaHei', sans-serif; padding: 20px; box-sizing: border-box;
+            overflow: hidden;
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        /* 背景独角兽 */
+        .unicorn-bg {
+            position: fixed; top: 20%; left: -10%; font-size: 150px; opacity: 0.4;
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.6)); z-index: -1;
+            animation: flySlow 30s linear infinite;
+        }
+        @keyframes flySlow { from{transform: translateX(0) rotate(10deg);} to{transform: translateX(120vw) rotate(-10deg);} }
+
+        /* 毛玻璃卡片 */
+        .card {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 40px; border-radius: 35px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center; max-width: 420px; width: 100%;
+            animation: floatCard 4s ease-in-out infinite alternate;
+        }
+        @keyframes floatCard { from{transform: translateY(0);} to{transform: translateY(-10px);} }
+
+        h1 { color: #fff; font-size: 1.8rem; margin-bottom: 25px; text-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1 span { font-size: 2.2rem; }
+        
+        /* 图片漂浮动效 */
+        .img-container { animation: floatImg 3s ease-in-out infinite alternate; }
+        @keyframes floatImg { from{transform: translateY(0) scale(1);} to{transform: translateY(-5px) scale(1.02);} }
+        img { 
+            width: 100%; border-radius: 20px; 
+            border: 3px solid rgba(255,255,255,0.7); 
+            box-shadow: 0 10px 25px rgba(252, 96, 118, 0.3);
+        }
+        
+        p { color: #fff; margin-top: 25px; line-height: 1.6; font-size: 1.1rem; text-shadow: 0 1px 2px rgba(0,0,0,0.1);}
+        .highlight { color: #ffe3ed; font-weight: bold; }
+        
+        .back-btn { 
+            margin-top: 30px; display: inline-block; text-decoration: none; 
+            background: rgba(255,255,255,0.4); padding: 12px 30px; border-radius: 30px;
+            color: #fff; font-weight: bold; border: 1px solid rgba(255,255,255,0.6);
+            transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.6); transform: translateY(-3px); color: #fc6076;}
+    </style>
+</head>
+<body>
+    <div class="unicorn-bg">🦄</div>
+    <div class="card">
+        <h1><span>🎁</span> 为创意注入魔法</h1>
+        <div class="img-container">
+            <img src="42f7b7c79878e29ffd5584e99adacd49.jpg" alt="赞助二维码">
+        </div>
+        <p>您的慷慨支持是维持这个<br><span class="highlight">梦幻世界</span>运转的动力源泉。</p>
+        <p style="font-size: 0.9rem; opacity: 0.8;">十分感谢您的心意！✨</p>
+        <a href="#" onclick="window.close(); return false;" class="back-btn">←返回梦境</a>
+    </div>
+</body>
+</html>
