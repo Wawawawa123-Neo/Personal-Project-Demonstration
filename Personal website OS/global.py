@@ -45,7 +45,7 @@ def login():
     session['user_role'], session['user_name'] = 'user', u
     return jsonify({"status": "success", "role": "user", "name": u})
 
-# --- 🛠️ 留言板核心接口 (已贴回) ---
+
 @app.route('/api/messages', methods=['GET', 'POST'])
 def handle_messages():
     if request.method == 'GET':
