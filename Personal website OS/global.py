@@ -14,7 +14,7 @@ ADMIN_CONF = {"username": "admin", "password": "123"}
 if not os.path.exists('static'):
     os.makedirs('static')
 
-# --- 留言板辅助函数 ---
+
 def load_messages():
     if os.path.exists(DB_FILE):
         try:
@@ -26,7 +26,7 @@ def save_messages(messages):
     with open(DB_FILE, 'w', encoding='utf-8') as f:
         json.dump(messages, f, ensure_ascii=False, indent=4)
 
-# --- 路由：页面跳转 ---
+
 @app.route('/')
 def index(): return render_template('index.html')
 @app.route('/MyProfile.html')
@@ -34,7 +34,7 @@ def profile(): return render_template('MyProfile.html')
 @app.route('/Supportme.html')
 def support(): return render_template('Supportme.html')
 
-# --- 路由：登录 ---
+
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -80,7 +80,7 @@ def delete_message():
         return jsonify({"status": "success"})
     return jsonify({"status": "error"}), 400
 
-# --- 🚀 核心：进度流 (保持不动) ---
+
 @app.route('/api/progress')
 def progress_stream():
     def event_stream():
@@ -94,7 +94,7 @@ def progress_stream():
         yield "data: {\"progress\": 1.0, \"state\": \"finished\"}\n\n"
     return Response(event_stream(), mimetype='text/event-stream')
 
-# --- 🎨 核心：生图 (保持之前的隐私存盘逻辑) ---
+
 @app.route('/api/draw', methods=['POST'])
 def draw_image():
     global is_rendering
@@ -104,23 +104,22 @@ def draw_image():
         raw = request.get_json()
         user_log = session.get('user_name', '访客')
 
-        # --- 1. 正确提取前端传来的模型名字 ---
-        # 因为 JS 里模型名是在 override_settings 里面的
+        
         front_settings = raw.get('override_settings', {})
         target_model = front_settings.get('sd_model_checkpoint')
         
-        # 如果前端没传，我们才给一个默认值
+    
         if not target_model:
             target_model = "perfectdeliberate_v50.safetensors [d7ba2d4319]"
 
-        # --- 2. 打印监控 ---
+      
         print(f"\n" + "🚀" * 10)
         print(f">>> [GPU调度] 用户:{user_log}")
         print(f">>> [请求模型]: {target_model}")
         print(f">>> [Prompt]: {raw.get('prompt', '')[:50]}...")
         print("🚀" * 10)
 
-        # --- 3. 构造发送给物理机的 payload ---
+  
         payload = {
             "prompt": raw.get("prompt", "1girl"),
             "negative_prompt": raw.get("negative_prompt", ""),
@@ -131,7 +130,7 @@ def draw_image():
             "sampler_name": raw.get("sampler_name", "Euler a"),
             "scheduler": raw.get("scheduler", "Karras"),
             "override_settings": {
-                # 关键：这里直接填入我们提取到的 target_model
+                
                 "sd_model_checkpoint": target_model,
                 "CLIP_stop_at_last_layers": 2
             }
@@ -159,8 +158,7 @@ def draw_image():
         return jsonify({"error": str(e)}), 500
     finally:
         is_rendering = False
-# --- DeepSeek AI ---
-# global.py 核心修改
+
 @app.route('/api/ai_chat', methods=['POST'])
 def ai_chat():
     try:
@@ -174,11 +172,11 @@ def ai_chat():
         "你说话要带点英伦腔（文字体现），神秘且充满控制欲。"},
                 {"role": "user", "content": data.get('message', '')}
             ],
-            "stream": True # 1. 开启流式
+            "stream": True 
         }
 
         def generate():
-            # 2. 使用 requests 的 stream 模式
+            
             resp = requests.post("https://api.deepseek.com/chat/completions", headers=headers, json=payload, stream=True)
             for line in resp.iter_lines():
                 if line:
@@ -190,13 +188,14 @@ def ai_chat():
                             chunk = json.loads(content)
                             text = chunk['choices'][0]['delta'].get('content', '')
                             if text:
-                                yield text # 3. 逐字吐出
+                                yield text 
                         except: continue
 
-        return Response(generate(), mimetype='text/event-stream') # 4. 设置流式响应头
+        return Response(generate(), mimetype='text/event-stream') 
     except Exception as e:
         return str(e), 500
 
 if __name__ == '__main__':
 
     app.run(host='0.0.0.0', port=8080, debug=True, threaded=True)
+
